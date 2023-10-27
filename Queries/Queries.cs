@@ -27,8 +27,7 @@ public class Queries
         }
         if( from != null ) {
             var projectsWithStartDate = fakeDB.events.Values.GroupBy( evt => evt.BelongsToProjectId ).Select( g => new {projectId = g.Key, startDate = g.Min(cm => cm.start)});
-            var eligibleProjects = projectsWithStartDate.Where( tpl => from < tpl.startDate ).Select( tpl => tpl.projectId ).ToHashSet();
-            // var projectsFrom = fakeDB.events.Values.Where( evt => from < evt.start ).Select( evt => evt.BelongsToProjectId ).ToHashSet();
+            var eligibleProjects = projectsWithStartDate.Where( tpl => from < tpl.startDate ).Select( tpl => tpl.projectId ).ToHashSet();            
             result = result.Where( proj => eligibleProjects.Contains( proj.Id ) ).AsQueryable();
         }
         if (limit != null) result = result.Take((int)limit);
